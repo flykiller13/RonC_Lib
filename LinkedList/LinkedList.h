@@ -14,4 +14,6 @@ void printLinkedList(Node* head);
 
 void removeDups(Node **head);
 
+int KthToLast(Node* head, int k);
+
 #endif
