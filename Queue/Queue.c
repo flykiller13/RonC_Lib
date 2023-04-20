@@ -1,69 +1,76 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
 #include "Queue.h"
 
-QueueNode *first;
-QueueNode *last;
+Queue* createQueue()
+{
+    Queue *q = malloc(sizeof(Queue));
+    q->first = q->last = NULL;
+
+    return q;
+}
 
 // Add an item to the end of the list
-void add(int data)
+void add(Queue *queue, int data)
 {
     QueueNode *new_node = malloc(sizeof(QueueNode));
     new_node->data = data;
 
-    if (last != NULL)
+    if (queue->last == NULL) // Queue is empty
     {
-        last->next = new_node;
-    }
-
-    last = new_node;
-
-    if (first == NULL)
-    {
-        first = new_node;
+        queue->first = queue->last = new_node;
+        return;
     }
     
+    // Add new node at the end and change last node
+    queue->last->next = new_node;
+    queue->last = new_node;
 }
 
 // Remove the first item in the list. Return -1 if the list is empty
-int removeNode()
+int pop(Queue *queue)
 {
-    if (first == NULL)
+    if (queue->first == NULL) // Queue is empty
     {
         return -1;
     }
-    
-    int temp_data = first->data;
+    // Store node to be removed
+    QueueNode *tmp = queue->first;
+    int tmp_data = queue->first->data;
 
-    first = first->next;
-    if (first == NULL)
-    {
-        last = NULL;
-    }
+    queue->first = queue->first->next; // Move first node
 
-    return temp_data;
+    // If first node is null change the last to null as well
+    if (queue->first == NULL)
+        queue->last = NULL;
+
+    free(tmp);
+    return tmp_data;
 }
 
 // Return the top of the queue. If the queue is null returns -1.
-int peek()
+int peek(Queue *queue)
 {
-    if (first == NULL)
+    if (queue->first == NULL)
     {
         return -1;
     }
     
-    return first->data;
+    return queue->first->data;
 }
 
 // Return true iff the queue is empty
-bool isEmpty()
+bool isEmpty(Queue *queue)
 {
-    return first == NULL;
+    return queue->first == NULL;
 }
 
 // Print the queue
-void printQueue()
+void printQueue(Queue *queue)
 {
-    QueueNode *p = first;
-    printf("Printing stack:\n");
+    QueueNode *p = queue->first;
+    printf("Printing queue:\n");
 
     while (p != NULL)
     {
@@ -75,21 +82,20 @@ void printQueue()
 // Driver code
 int main()
 {
-    printf("%s", isEmpty() ? "List is empty\n" : "List contains some elements");
+    Queue *q = createQueue();
 
-    add(1);
-    add(2);
-    add(500);
-    add(501);
+    add(q, 1);
+    add(q, 2);
+    add(q, 4);
+    add(q, 5);
 
-    printQueue();
-    printf("Top element is %d\n", peek());
+    printQueue(q);
 
-    printf("%s", isEmpty() ? "List is empty\n" : "List contains some elements\n");
+    printf("Popped %d\n", pop(q));
 
-    removeNode();
+    printQueue(q);
 
-    printQueue();
+    printf("First elem: %d\n", peek(q));
 
     return 0;
 }

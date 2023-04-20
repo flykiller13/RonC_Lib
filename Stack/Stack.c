@@ -1,35 +1,39 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
 #include "Stack.h"
 
-StackNode *top;
-
 // Remove the top item from the stack and return it. Return -1 if the stack is empty
-int pop()
+int pop(StackNode **top)
 {
-    if (top == NULL)
+    if (*top == NULL)
     {
         printf("Stack is empty!\n");
         return -1;
     }
 
     // Store the data and remove the top node
-    int temp_data = top->data;
-    top = top->next;
+    int temp_data = (*top)->data;
+    StackNode *tmp = *top;
+    *top = (*top)->next;
+    free(tmp);
 
     return temp_data;
 }
 
 // Add an item to the top of the stack
-void push(int data)
+void push(StackNode **top, int data)
 {
     StackNode *new_node = malloc(sizeof(StackNode));
     new_node->data = data;
+    new_node->next = *top;
 
-    new_node->next = top;
-    top = new_node;
+    *top = new_node;
+    printf("Added %d at %p\n", (*top)->data, top);
 }
 
 // Return the top of the stack
-int peek()
+int peek(StackNode *top)
 {
     if (top == NULL)
     {
@@ -41,13 +45,13 @@ int peek()
 }
 
 // Return true iff the stack is empty
-bool isEmpty()
+bool isEmpty(StackNode *top)
 {
     return top == NULL;
 }
 
 // Print the stack
-void printStack()
+void printStack(StackNode *top)
 {
     StackNode *p = top;
     printf("Printing stack:\n");
@@ -62,24 +66,22 @@ void printStack()
 // Driver code
 int main()
 {
-    push(1);
-    push(2);
-    push(3);
-    push(4);
+    StackNode *top = malloc(sizeof(StackNode)); // Create first node
 
-    printf("Popped: %d\n", pop());
-    printf("Top item: %d\n", peek());
+    top->data = 1;
 
-    printStack();
+    push(&top, 2);
+    push(&top, 3);
+    push(&top, 4);
 
-    pop();
-    pop();
-    pop();
-    pop();
+    printStack(top);
 
-    push(7);
+    printf("Top elem: %d\n", peek(top));
 
-    printStack();
+    printf("Popped %d\n", pop(&top));
+    printf("Popped %d\n", pop(&top));
+
+    printStack(top);
 
     return 0;
 }

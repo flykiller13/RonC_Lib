@@ -1,18 +1,19 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
+#ifndef STACK
+#define STACK
 
 typedef struct StackNode{
     struct StackNode *next;
     int data;
 } StackNode;
 
-int pop();
+int pop(StackNode **top);
 
-void push(int data);
+void push(StackNode **top, int data);
 
-int peek();
+int peek(StackNode *top);
 
-bool isEmpty();
+bool isEmpty(StackNode *top);
 
-void printStack();
+void printStack(StackNode *top);
+
+#endif

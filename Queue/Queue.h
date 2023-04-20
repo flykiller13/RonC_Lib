@@ -1,18 +1,25 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
+#ifndef QUEUE
+#define QUEUE
 
 typedef struct QueueNode{
     struct QueueNode *next;
     int data;
 } QueueNode;
 
-void add(int data);
+typedef struct Queue{
+    QueueNode *first, *last;
+} Queue;
 
-int removeNode();
+Queue* createQueue();
 
-int peek();
+void add(Queue *queue, int data);
 
-bool isEmpty();
+int pop(Queue *queue);
 
-void printQueue();
+int peek(Queue *queue);
+
+bool isEmpty(Queue *queue);
+
+void printQueue(Queue *queue);
+
+#endif
