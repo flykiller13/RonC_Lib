@@ -63,23 +63,40 @@ void printStack(StackNode *top)
     }
 }
 
+// Reurns minimum element in the stack. O(1) time.
+int min(StackNode *top)
+{
+    StackNode *buf = malloc(sizeof(StackNode));
+    buf->data = top->data;
+
+    while (top != NULL)
+    {
+        pop(&top);
+        if (peek(buf) > peek(top))
+        {
+            push(&buf, pop(&top));
+        }
+    }
+    
+    return peek(buf);
+}
+
 // Driver code
 int main()
 {
     StackNode *top = malloc(sizeof(StackNode)); // Create first node
 
-    top->data = 1;
+    top->data = 9;
 
     push(&top, 2);
     push(&top, 3);
+    push(&top, 2);
     push(&top, 4);
+    push(&top, 8);
 
     printStack(top);
 
-    printf("Top elem: %d\n", peek(top));
-
-    printf("Popped %d\n", pop(&top));
-    printf("Popped %d\n", pop(&top));
+    printf("Min elem: %d\n", min(top));
 
     printStack(top);
 

@@ -16,4 +16,6 @@ bool isEmpty(StackNode *top);
 
 void printStack(StackNode *top);
 
+int min(StackNode *top);
+
 #endif
